@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Mobile-test
+    </title>
+    <style>
+        .square
+        {
+            width: 100%;
+            height: 20vh;
+            margin-top: 20px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+        <div class="contianer">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+        </div>
+
+
+        y: <div class="y"></div>
+        x: <div class="x"></div>
+        z: <div class="z"></div>
+    <script>
+
+    data_x = 0;
+    data_y = 0;
+    data_z = 0;
+
+    $(document).ready(function()
+    {
+        window.addEventListener("devicemotion",onDeviceMotion,false);
+
+        function loop()
+        {
+            console.log(data_x +' '+data_y+' '+ data_z);
+
+            $.ajax({
+                url: '/', 
+                type: 'POST', 
+                contentType: 'application/json', 
+                data: JSON.stringify({x:data_x,y:data_y,z:data_z})}
+            );
+
+            setTimeout(function()
+            {
+                loop();
+            }, 300);
+        }
+    });
+
+    function onDeviceMotion()
+    {
+        data_x = Math.round(event.accelerationIncludingGravity.x);
+        data_y = Math.round(event.accelerationIncludingGravity.y);
+        data_z = Math.round(event.accelerationIncludingGravity.z);
+
+        $('.x').html(data_x);
+        $('.y').html(data_y);
+        $('.z').html(data_z);
+    }
+    </script>
+</body>
+</html>
